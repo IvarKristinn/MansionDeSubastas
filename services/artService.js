@@ -1,8 +1,6 @@
 const EventEmitter = require('events');
 const Schema = require("mongoose").Schema;
-
-//const { Art, Artist } = require("../data/db");
-const { Art } = require("../data/db");
+const { Art, Artist } = require("../data/db");
 
 class ArtService extends EventEmitter {
     constructor() {
