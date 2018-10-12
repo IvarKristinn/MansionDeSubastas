@@ -35,7 +35,7 @@ app.get("/api/arts", (req, res) => {
 */
 app.get("/api/arts/:id", (req, res) => {
   const _artService = new artService();
-  const id = req.params.id;
+  const artId = req.params.id;
   _artService.on(_artService.events.GET_ART_BY_ID, result => {
     if(result === -1) {
       return res.status(500).send();
@@ -45,7 +45,7 @@ app.get("/api/arts/:id", (req, res) => {
       return res.status(200).json(result);
     }
   });
-  _artService.getArtById(id);
+  _artService.getArtById(artId);
 });
 
 /*
@@ -74,9 +74,9 @@ app.get("/api/artists", (req, res) => {
 /*
 /api/artists/:id[GET] - get artists by an id
 */
-app.get("/api/artists", (req, res) => {
+app.get("/api/artists/:id", (req, res) => {
   const _artistService = new artistService();
-  const id = req.params.id;
+  const artistId = req.params.id;
   _artistService.on(_artistService.events.GET_ARTIST_BY_ID, result => {
     if(result === -1) {
       return res.status(500).send();
@@ -86,7 +86,7 @@ app.get("/api/artists", (req, res) => {
       return res.status(200).json(result);
     }
   });
-  _artistService.getArtistById(id);
+  _artistService.getArtistById(artistId);
 });
 
 /*
