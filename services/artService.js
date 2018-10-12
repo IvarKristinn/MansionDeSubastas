@@ -17,7 +17,7 @@ class ArtService extends EventEmitter {
         // Should emit a GET_ALL_ARTS event when the data is available
         Art.find({}, (err, arts) => {
             if(err) {
-                if(err.reason === -1 ) {
+                if(err.reason === -1) {
                     this.emit(this.events.GET_ALL_ARTS, err.reason);
                 } else {
                     this.emit(this.events.GET_ALL_ARTS);
@@ -25,7 +25,7 @@ class ArtService extends EventEmitter {
              }
             this.emit(this.events.GET_ALL_ARTS, arts);
         });
-    }
+    };
 
     getArtById(id) {
         // Your implementation goes here
@@ -40,7 +40,7 @@ class ArtService extends EventEmitter {
             }
             this.emit(this.events.GET_ART_BY_ID, arts);
         });
-    }
+    };
 
     createArt(art) {
         // Your implementation goes here

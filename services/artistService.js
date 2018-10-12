@@ -1,4 +1,6 @@
 const EventEmitter = require('events');
+const Schema = require("mongoose").Schema;
+const { Art, Artist } = require("../data/db");
 
 class ArtistService extends EventEmitter {
     constructor() {
@@ -12,11 +14,31 @@ class ArtistService extends EventEmitter {
     getAllArtists() {
         // Your implementation goes here
         // Should emit a GET_ALL_ARTISTS event when the data is available
+        Artist.find({}, (err, artists) => {
+            if(err) {
+                if(err.reason === -1) {
+                    this.emit(this.events.GET_ALL_ARTISTS, err.reason);
+                } else {
+                    this.emit(this.events.GET_ALL_ARTISTS);
+                }
+            }
+            this.emit(this.events.GET_ALL_ARTISTS, artists);            
+        });
     };
 
-    getArtistById() {
+    getArtistById(id) {
         // Your implementation goes here
         // Should emit a GET_ARTIST_BY_ID event when the data is available
+        Artist.findById(id, (err, artists) => {
+            if(err) {
+                if(err.reason === -1) {
+                    this.emit(this.events.GET_ARTIST_BY_ID, err.reason);
+                } else {
+                    this.emit(this.events.GET_ARTIST_BY_ID);
+                }
+            }
+            this.emit(this.events.GET_ARTIST_BY_ID, artists);            
+        });
     };
 
     createArtist() {

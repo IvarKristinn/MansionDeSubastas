@@ -45,7 +45,7 @@ app.get("/api/arts/:id", (req, res) => {
       return res.status(200).json(result);
     }
   });
-  _artService.getArtById();
+  _artService.getArtById(id);
 });
 
 /*
@@ -57,10 +57,37 @@ app.get("/api/arts/:id", (req, res) => {
 /*
 /api/artists[GET] - get all artists
 */
+app.get("/api/artists", (req, res) => {
+  const _artistService = new artistService();
+  _artistService.on(_artistService.events.GET_ALL_ARTISTS, result => {
+    if(result === -1) {
+      return res.status(500).send();
+    } else if (result === null) {
+      return res.status(404).send();
+    } else {
+      return res.status(200).json(result);
+    }
+  });
+  _artistService.getAllArtists();
+});
 
 /*
 /api/artists/:id[GET] - get artists by an id
 */
+app.get("/api/artists", (req, res) => {
+  const _artistService = new artistService();
+  const id = req.params.id;
+  _artistService.on(_artistService.events.GET_ARTIST_BY_ID, result => {
+    if(result === -1) {
+      return res.status(500).send();
+    } else if (result === null) {
+      return res.status(404).send();
+    } else {
+      return res.status(200).json(result);
+    }
+  });
+  _artistService.getArtistById(id);
+});
 
 /*
 /api/artists[POST] - Creates a new artist
