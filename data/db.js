@@ -5,7 +5,7 @@ const auctionSchema = require('../schemas/auction');
 const auctionBidSchema = require('../schemas/auctionBid');
 const customerSchema = require('../schemas/customer');
 
-const connection = mongoose.createConnection('mongodb://veftdbuser:Abc12345>@ds125482.mlab.com:25482/mansion-de-subastas', { 
+const connection = mongoose.createConnection("mongodb://veftdbuser:Abc12345@ds125482.mlab.com:25482/mansion-de-subastas", { 
     useNewUrlParser: true });
 
 module.exports = {

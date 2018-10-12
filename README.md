@@ -6,7 +6,7 @@ About the assignment
 
 ## To build
 Needs the newest NodeJs (https://nodejs.org/en/).  
-Needs npm init -y and npm install --save express body-parser.    
+Needs npm init -y and npm install --save express body-parser mongodb mongoose  
 To build and run node index.js.  
 
 
