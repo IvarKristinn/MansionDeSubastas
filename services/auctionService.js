@@ -47,7 +47,7 @@ class AuctionService extends EventEmitter {
 
 	getAuctionWinner(auctionId) {
 		// Your implementation goes here
-        // Should emit a GET_AUCTION_WINNER event when the data is available
+		// Should emit a GET_AUCTION_WINNER event when the data is available
 	};
 
 	createAuction(auction) {
