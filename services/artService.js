@@ -52,8 +52,8 @@ class ArtService extends EventEmitter {
                 } else {
                     this.emit(this.events.CREATE_ART);
                 }
-                this.emit(this.events.CREATE_ART, arts);
             }
+            this.emit(this.events.CREATE_ART, arts);
         });
     };
 };

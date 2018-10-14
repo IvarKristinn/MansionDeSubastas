@@ -106,44 +106,87 @@ app.get("/api/artists/:id", (req, res) => {
 /*
 /api/artists[POST] - Creates a new artist
 */
-// TODO: Implement
 app.post("/api/artists", (req, res) => {
     const body = req.body;
-    return res.status(201).json({ "Hello": "This is POST artists" });
+    const _artistService = new artistService();
+    _artistService.on(_artistService.events.CREATE_ARTIST, result => {
+        if(result == -1) {
+            return res.status(500).send()
+        } else {
+            return res.status(201).send();
+        }
+    });
+    _artistService.createArtist(body);
 });
 
 // ********** CUSTOMERS **************
 /*
 /api/customers[GET] - get all customers
 */
-// TODO: Implement
 app.get("/api/customers", (req, res) => {
-    return res.json({ "Hello": "This is GET all customers"});
+    const _customerService = new customerService();
+    _customerService.on(_customerService.events.GET_ALL_CUSTOMERS, result => {
+      if(result === undefined) {
+        return res.status(404).send();
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+    _customerService.getAllCustomers();
 });
 
 /*
 /api/customers/:id[GET] - get customer by an id
 */
-// TODO: Implement
 app.get("/api/customers/:id", (req, res) => {
-    return res.json({ "Hello": "This is GET cutomer by id"});
+    const _customerService = new customerService();
+    const customerId = req.params.id;
+    _customerService.on(_customerService.events.GET_CUSTOMER_BY_ID, result => {
+      if(result === undefined) {
+        return res.status(404).send();
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+    _customerService.getCustomerById(customerId);
 });
 
 /*
 /api/customers[POST] - Creates a new customer
 */
-// TODO: Implement
 app.post("/api/customers", (req, res) => {
     const body = req.body;
-    return res.status(201).json({ "Hello": "This is POST new customer" });
+    const _customerService = new customerService();
+    _customerService.on(_customerService.events.CREATE_CUSTOMER, result => {
+        if(result == -1) {
+            return res.status(500).send()
+        } else {
+            return res.status(201).send();
+        }
+    });
+    _customerService.createCustomer(body);
 });
 
 /*
 /api/customers/:id/auction-bids[GET] - get all auction bids associated with a customer
 */
-// TODO: Implement
 app.get("/api/customers/:id/auction-bids", (req, res) => {
-    return res.json({ "Hello": "This is GET all auction bids by customer id"});
+    const _customerService = new customerService();
+    const customerId = req.params.id;
+    _customerService.on(_customerService.events.GET_CUSTOMER_AUCTION_BIDS, result => {
+      if(result === undefined) {
+        return res.status(404).send();
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+    _customerService.getCustomerAuctionBids(customerId);
 });
 
 
@@ -151,17 +194,36 @@ app.get("/api/customers/:id/auction-bids", (req, res) => {
 /*
 /api/auctions[GET] - get all auctions
 */
-// TODO: Implement
 app.get("/api/auctions", (req, res) => {
-    return res.json({ "Hello": "This is GET all auctions"});
+    const _auctionService = new auctionService();
+    _auctionService.on(_auctionService.events.GET_ALL_AUCTIONS, result => {
+      if(result === undefined) {
+        return res.status(404).send();
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+    _auctionService.getAllAuctions();
 });
 
 /*
 /api/auctions/:id[GET] - gets an auction by id
 */
-// TODO: Implement
 app.get("/api/auctions/:id", (req, res) => {
-    return res.json({ "Hello": "This is GET auction by ID"});
+    const _auctionService = new auctionService();
+    const auctionId = req.params.id;
+    _auctionService.on(_auctionService.events.GET_AUCTION_BY_ID, result => {
+      if(result === undefined) {
+        return res.status(404).send();
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+    _auctionService.getAuctionById(auctionId);
 });
 
 /*
@@ -172,7 +234,35 @@ should return a status code 200 (OK) with the message: ‘This auction had no bi
 */
 // TODO: Implement
 app.get("/api/auctions/:id/winner", (req, res) => {
-    return res.json({ "Hello": "This is GET winner of auction by auction ID"});
+    const _auctionService = new auctionService();
+    const _customerService = new customerService();
+    const auctionId = req.params.id;
+
+    _customerService.on(_customerService.events.GET_CUSTOMER_BY_ID, result => {
+      if(result === undefined) {
+        return res.status(200).json({ 'message': 'This auction had no bids'});
+      } else if (result === null) {
+        return res.status(500).send();
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+
+    _auctionService.on(_auctionService.events.GET_AUCTION_WINNER, result => {
+        if(result === undefined) {
+          return res.status(404).send();
+        } else if (result === null) {
+            return res.status(500).send();
+
+        } else if (Date.now() < Date.parse(result.endDate)) {
+            return res.status(409).send()
+        } else {
+            console.log(result);
+            _customerService.getCustomerById(result.auctionWinner);
+        }
+    });
+
+    _auctionService.getAuctionWinner(auctionId);
 });
 
 /*
@@ -181,18 +271,51 @@ Model section). The art id provided within the body must be a valid art id with 
 property isAuctionItem set to true. If the isAuctionItem is set to false, the web
 service should return a status code 412 (Precondition failed).
 */
-// TODO: Implement
 app.post("/api/auctions", (req, res) => {
     const body = req.body;
-    return res.status(201).json({ "Hello": "This is POST new auction" });
+    const _artService = new artService();
+    const _auctionService = new auctionService();
+    const artId = body.artId;
+
+    _artService.on(_artService.events.GET_ART_BY_ID, result => {
+        if(result === 1) {
+            return res.status(404).send();
+        } else if (result === -1) {
+            return res.status(500).send();
+        } else if (result.isAuctionItem === false) {
+            return res.status(412).send();
+        }
+    });
+
+    _auctionService.on(_auctionService.events.CREATE_AUCTION, result => {
+        if(result === -1) {
+            return res.status(500).send()
+        } else {
+            return res.status(201).send();
+        }
+    })
+
+    _artService.getArtById(artId);
+    _auctionService.createAuction(body);
 });
 
 /*
 /api/auctions/:id/bids [GET] - Gets all auction bids associated with an auction
 */
-// TODO: Implement
 app.get("/api/auctions/:id/bids", (req, res) => {
-    return res.json({ "Hello": "This is GET all bids on auctions by auction ID"});
+    const auctionId = req.params.id;
+    const _auctionService = new auctionService();
+
+    _auctionService.on(_auctionService.events.GET_AUCTION_BIDS_WITHIN_AUCTION, result => {
+        if(result === undefined) {
+            return res.status(404).send();
+        } else if (result === null) {
+            return res.status(500).send();
+        } else {
+            return res.status(200).json(result);
+        }
+    });
+    _auctionService.getAuctionBidsWithinAuction(auctionId);
 });
 
 /*
@@ -208,7 +331,49 @@ highest bidder.
 // TODO: Implement
 app.post("/api/auctions/:id/bids", (req, res) => {
     const body = req.body;
-    return res.status(201).json({ "Hello": "This is POST new bid by auction ID" });
+    const _auctionService = new auctionService();
+    const auctionId = req.params.id;
+    let minPrice;
+    let customerId;
+
+    _auctionService.on(_auctionService.events.GET_AUCTION_BY_ID, result => {
+      if(result === undefined) {
+            return res.status(404).send();
+        } else if (result === null) {
+            return res.status(500).send();
+        } else if(Date.now() > Date.parse(result.endDate)) {
+            return res.status(403).send();
+        } else {
+            this.minPrice = result.minimumPrice;
+        }
+    });
+
+    _auctionService.on(_auctionService.events.GET_AUCTION_BIDS_WITHIN_AUCTION, result => {
+        if(result === undefined) {
+            return res.status(404).send();
+        } else if (result === null) {
+            return res.status(500).send();
+        } else {
+            let highestBid = _auctionService.findHighestBid(result);
+            if(highestBid.price > body.price || body.price < this.minPrice) {
+                return res.status(412).send();
+            }
+        }
+    });
+
+    _auctionService.on(_auctionService.events.PLACE_NEW_BID, result => {
+        if(result == -1) {
+            return res.status(500).send()
+        } else {
+            return res.status(201).send();
+        }
+    });
+
+
+    _auctionService.getAuctionById(auctionId);
+    _auctionService.getAuctionBidsWithinAuction(auctionId);
+    _auctionService.placeNewBid(auctionId, body.customerId, body.price)
+
 });
 
 //To close the connection
