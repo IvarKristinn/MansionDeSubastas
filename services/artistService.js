@@ -16,7 +16,7 @@ class ArtistService extends EventEmitter {
         // Should emit a GET_ALL_ARTISTS event when the data is available
         Artist.find({}, (err, artists) => {
             if(err) {
-                if(err.reason === -1) {
+                if(err.reason === undefined) {
                     this.emit(this.events.GET_ALL_ARTISTS, err.reason);
                 } else {
                     this.emit(this.events.GET_ALL_ARTISTS);
@@ -31,7 +31,7 @@ class ArtistService extends EventEmitter {
         // Should emit a GET_ARTIST_BY_ID event when the data is available
         Artist.findById(id, (err, artists) => {
             if(err) {
-                if(err.reason === -1) {
+                if(err.reason === undefined) {
                     this.emit(this.events.GET_ARTIST_BY_ID, err.reason);
                 } else {
                     this.emit(this.events.GET_ARTIST_BY_ID);
