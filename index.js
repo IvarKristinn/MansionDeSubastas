@@ -21,9 +21,9 @@ app.use(bodyParser.json());
 app.get("/api/arts", (req, res) => {
   const _artService = new artService();
   _artService.on(_artService.events.GET_ALL_ARTS, result => {
-    if(result === 1) {
+    if(result === undefined) {
       return res.status(404).send();
-    } else if (result === -1) {
+    } else if (result === null) {
       return res.status(500).send();
     } else {
       return res.status(200).json(result);
@@ -39,9 +39,9 @@ app.get("/api/arts/:id", (req, res) => {
   const _artService = new artService();
   const artId = req.params.id;
   _artService.on(_artService.events.GET_ART_BY_ID, result => {
-    if(result === 1) {
+    if(result === undefined) {
       return res.status(404).send();
-    } else if (result === -1) {
+    } else if (result === null) {
       return res.status(500).send();
     } else {
       return res.status(200).json(result);
@@ -119,10 +119,37 @@ app.get("/api/artists/:id", (req, res) => {
 /*
 /api/auctions[GET] - get all auctions
 */
+app.get("/api/auctions", (req, res) => {
+  const _auctionsService = new auctionService();
+  _auctionsService.on(_auctionsService.events.GET_ALL_AUCTIONS, result => {
+    if(result === undefined) {
+      return res.status(404).send();
+    } else if (result === null) {
+      return res.status(500).send();
+    } else {
+      return res.status(200).json(result);
+    }
+  });
+  _auctionsService.getAllAuctions();
+});
 
 /*
 /api/auctions/:id[GET] - gets an auction by id
 */
+app.get("/api/auctions/:id", (req, res) => {
+  const _auctionsService = new auctionService();
+  const auctionId = req.params.id
+  _auctionsService.on(_auctionsService.events.GET_AUCTION_BY_ID, result => {
+    if(result === undefined) {
+      return res.status(404).send();
+    } else if (result === null) {
+      return res.status(500).send();
+    } else {
+      return res.status(200).json(result);
+    }
+  });
+  _auctionsService.getAuctionById(auctionId);
+});
 
 /*
 /api/auctions/:id/winner[GET] - Gets the winner of the auction. If the auction is not

@@ -18,7 +18,7 @@ class ArtService extends EventEmitter {
         Art.find({}, (err, arts) => {
             if(err) {
                 if(err.reason === undefined) {
-                    this.emit(this.events.GET_ALL_ARTS, 1);
+                    this.emit(this.events.GET_ALL_ARTS, err.reason);
                 } else {
                     this.emit(this.events.GET_ALL_ARTS);
                 }
@@ -33,7 +33,7 @@ class ArtService extends EventEmitter {
         Art.findById(id, (err, arts) => {
             if(err) {
                 if(err.reason === undefined) {
-                    this.emit(this.events.GET_ART_BY_ID, 1);
+                    this.emit(this.events.GET_ART_BY_ID, err.reason);
                 } else {
                     this.emit(this.events.GET_ART_BY_ID);
                 }

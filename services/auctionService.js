@@ -1,4 +1,6 @@
 EventEmitter = require('events');
+const Schema = require("mongoose").Schema;
+const { Art, Auction, AuctionBid, Customer } = require("../data/db");
 
 class AuctionService extends EventEmitter {
 	constructor() {
@@ -15,12 +17,32 @@ class AuctionService extends EventEmitter {
 
 	getAllAuctions() {
 		// Your implementation goes here
-        // Should emit a GET_ALL_AUCTIONS event when the data is available
+		// Should emit a GET_ALL_AUCTIONS event when the data is available
+		Auction.find({}, (err, allAuctions) => {
+			if(err) {
+				if(err.reason === undefined) {
+					this.emit(this.events.GET_ALL_AUCTIONS, err.reason);	
+				} else {
+					this.emit(this.events.GET_ALL_AUCTIONS);
+				}
+			}
+			this.emit(this.events.GET_ALL_AUCTIONS, allAuctions);
+		});
 	};
 
 	getAuctionById(id) {
 		// Your implementation goes here
-        // Should emit a GET_AUCTION_BY_ID event when the data is available
+		// Should emit a GET_AUCTION_BY_ID event when the data is available
+		Auction.findById(id, (err, auction) => {
+			if(err) {
+				if(err.reason === undefined) {
+					this.emit(this.events.GET_AUCTION_BY_ID, err.reason);
+				} else {
+					this.emit(this.events.GET_AUCTION_BY_ID);
+				}
+			}
+			this.emit(this.events.GET_AUCTION_BY_ID, auction);
+		});
 	};
 
 	getAuctionWinner(auctionId) {
