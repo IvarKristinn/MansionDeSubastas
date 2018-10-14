@@ -1,14 +1,16 @@
 // Here the web service should be setup and routes declared
 const express = require("express");
 const bodyParser = require("body-parser");
+const app = express();
+const port = 5500;
+
 
 const artistService = require("./services/artistService");
 const artService = require('./services/artService');
 const auctionService = require("./services/auctionService");
 const customerService = require("./services/customerService");
-const port = 5500;
 
-const app = express();
+
 app.use(bodyParser.json());
 
 // ********** ARTS **************
@@ -19,10 +21,10 @@ app.use(bodyParser.json());
 app.get("/api/arts", (req, res) => {
   const _artService = new artService();
   _artService.on(_artService.events.GET_ALL_ARTS, result => {
-    if(result === -1) {
-      return res.status(500).send();
-    } else if (result === null) {
+    if(result === 1) {
       return res.status(404).send();
+    } else if (result === -1) {
+      return res.status(500).send();
     } else {
       return res.status(200).json(result);
     }
@@ -37,10 +39,10 @@ app.get("/api/arts/:id", (req, res) => {
   const _artService = new artService();
   const artId = req.params.id;
   _artService.on(_artService.events.GET_ART_BY_ID, result => {
-    if(result === -1) {
-      return res.status(500).send();
-    } else if (result === null) {
+    if(result === 1) {
       return res.status(404).send();
+    } else if (result === -1) {
+      return res.status(500).send();
     } else {
       return res.status(200).json(result);
     }
@@ -72,10 +74,10 @@ app.post("/api/arts", (req, res) => {
 app.get("/api/artists", (req, res) => {
   const _artistService = new artistService();
   _artistService.on(_artistService.events.GET_ALL_ARTISTS, result => {
-    if(result === -1) {
-      return res.status(500).send();
-    } else if (result === null) {
+    if(result === undefined) {
       return res.status(404).send();
+    } else if (result === null) {
+      return res.status(500).send();
     } else {
       return res.status(200).json(result);
     }
@@ -90,10 +92,10 @@ app.get("/api/artists/:id", (req, res) => {
   const _artistService = new artistService();
   const artistId = req.params.id;
   _artistService.on(_artistService.events.GET_ARTIST_BY_ID, result => {
-    if(result === -1) {
-      return res.status(500).send();
-    } else if (result === null) {
+    if(result === undefined) {
       return res.status(404).send();
+    } else if (result === null) {
+      return res.status(500).send();
     } else {
       return res.status(200).json(result);
     }
