@@ -22,7 +22,7 @@ class ArtistService extends EventEmitter {
                     this.emit(this.events.GET_ALL_ARTISTS);
                 }
             }
-            this.emit(this.events.GET_ALL_ARTISTS, artists);            
+            this.emit(this.events.GET_ALL_ARTISTS, artists);
         });
     };
 
@@ -37,13 +37,23 @@ class ArtistService extends EventEmitter {
                     this.emit(this.events.GET_ARTIST_BY_ID);
                 }
             }
-            this.emit(this.events.GET_ARTIST_BY_ID, artists);            
+            this.emit(this.events.GET_ARTIST_BY_ID, artists);
         });
     };
 
-    createArtist() {
+    createArtist(newArtist) {
         // Your implementation goes here
         // Should emit a CREATE_ARTIST event when the data is available
+        Artist.create(newArtist, err => {
+            if(err) {
+                if(err.reason === -1) {
+                    this.emit(this.events.CREATE_ARTIST, err.reason);
+                } else {
+                    this.emit(this.events.CREATE_ARTIST);
+                }
+            }
+            this.emit(this.events.CREATE_ARTIST);
+        });
     };
 };
 

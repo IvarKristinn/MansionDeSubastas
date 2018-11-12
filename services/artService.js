@@ -45,6 +45,16 @@ class ArtService extends EventEmitter {
     createArt(art) {
         // Your implementation goes here
         // Should emit a CREATE_ART event when the data is available
+        Art.create(art, (err, arts) => {
+            if(err) {
+                if(err.reason === -1) {
+                    this.emit(this.events.CREATE_ART, err.reason);
+                } else {
+                    this.emit(this.events.CREATE_ART);
+                }
+            }
+            this.emit(this.events.CREATE_ART, arts);
+        });
     };
 };
 
